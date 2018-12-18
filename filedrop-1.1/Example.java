@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -15,7 +17,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  * A simple example showing how to use {@link FileDrop}
@@ -34,28 +38,29 @@ public class Example {
     	
         javax.swing.JFrame frame = new javax.swing.JFrame( "FileDrop" );
         
-        //javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder( "Drop 'em" );
-        final javax.swing.JTextArea textLeft = new javax.swing.JTextArea();
-        final javax.swing.JTextArea textCenter = new javax.swing.JTextArea();
-        final javax.swing.JTextArea textRight = new javax.swing.JTextArea();
-//        frame.getContentPane().add( 
-//            new javax.swing.JScrollPane( textLeft ), 
-//            java.awt.BorderLayout.WEST );        
-        frame.getContentPane().add( 
-            new javax.swing.JScrollPane( textCenter ), 
-            java.awt.BorderLayout.CENTER );
-//        frame.getContentPane().add( 
-//            new javax.swing.JScrollPane( textCenter ), 
-//            java.awt.BorderLayout.EAST );        
+        JPanel panelMain = new JPanel();
+        panelMain.setLayout(new GridLayout(1,3));
         
-        new FileDrop( System.out, textLeft, /*dragBorder,*/ new FileDrop.Listener()
+        JTextArea jtf = new JTextArea();
+        jtf.setBorder(BorderFactory.createLineBorder(Color.black));
+        JTextArea jtf2 = new JTextArea();
+        jtf2.setBorder(BorderFactory.createLineBorder(Color.black));
+        JTextArea jtf3 = new JTextArea();
+        jtf3.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        panelMain.add(jtf);
+        panelMain.add(jtf2);
+        panelMain.add(jtf3);       
+        frame.getContentPane().add(panelMain);
+        
+        new FileDrop( System.out, jtf, /*dragBorder,*/ new FileDrop.Listener()
         {   public void filesDropped( java.io.File[] files )
             {   
-        	String way = "C:\\test\\";
-        	
+        	String way = "C:\\test\\livrés\\";
+        	jtf.append("Livrer");
         	for( int i = 0; i < files.length; i++ )
                 {   try
-                    {   textLeft.append( files[i].getCanonicalPath() + "\n" );
+                    {   jtf.append( files[i].getCanonicalPath() + "\n" );
                     // Récupération du fichier DnD
                     File file = new File(files[i].getCanonicalPath());
                     
@@ -80,14 +85,14 @@ public class Example {
             }   // end filesDropped
         }); // end FileDrop.Listener
         
-        new FileDrop( System.out, textCenter, /*dragBorder,*/ new FileDrop.Listener()
+        new FileDrop( System.out, jtf2, /*dragBorder,*/ new FileDrop.Listener()
         {   public void filesDropped( java.io.File[] files )
             {   
-        	String way = "C:\\test\\";
-        	
+        	String way = "C:\\test\\validés\\";
+        	jtf.append("Valider");
         	for( int i = 0; i < files.length; i++ )
                 {   try
-                    {   textCenter.append( files[i].getCanonicalPath() + "\n" );
+                    {   jtf2.append( files[i].getCanonicalPath() + "\n" );
                     // Récupération du fichier DnD
                     File file = new File(files[i].getCanonicalPath());
                     
@@ -112,14 +117,14 @@ public class Example {
             }   // end filesDropped
         }); // end FileDrop.Listener
         
-        new FileDrop( System.out, textRight, /*dragBorder,*/ new FileDrop.Listener()
+        new FileDrop( System.out, jtf3, /*dragBorder,*/ new FileDrop.Listener()
         {   public void filesDropped( java.io.File[] files )
             {   
-        	String way = "C:\\test\\";
-        	
+        	String way = "C:\\test\\invalidés\\";
+        	jtf.append("Invalider");
         	for( int i = 0; i < files.length; i++ )
                 {   try
-                    {   textRight.append( files[i].getCanonicalPath() + "\n" );
+                    {   jtf3.append( files[i].getCanonicalPath() + "\n" );
                     // Récupération du fichier DnD
                     File file = new File(files[i].getCanonicalPath());
                     
@@ -144,7 +149,7 @@ public class Example {
             }   // end filesDropped
         }); // end FileDrop.Listener        
 
-        frame.setSize(300,300);
+        frame.setSize(900,300);
 //        frame.setBounds( 100, 100, 100, 100 );
         frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
         frame.setVisible(true);
