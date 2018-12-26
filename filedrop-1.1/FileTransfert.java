@@ -42,5 +42,36 @@ public class FileTransfert {
 		}
 		
 	}
+	
+	public void delivery(File file, String way, String newFileName) {
+		
+	    try {
+			bis = new BufferedInputStream(new FileInputStream(file));
+		    bos = new BufferedOutputStream(new FileOutputStream(new File(way + newFileName)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        try {
+    	    while((longueur = bis.read(buf)) > 0){
+    	    	bos.write(buf, 0, longueur);
+    	    }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     
+        try {
+			bis.close();
+            bos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 
 }

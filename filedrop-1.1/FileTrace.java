@@ -20,7 +20,25 @@ public class FileTrace {
     			"Date : " + new Date().toString(), 
     			"Acteur : " + System.getProperty("user.name"), 
     			"Origine : " + file.getAbsolutePath(), 
-    			"Destination" + way, 
+    			"Destination : " + way, 
+    			"------------------------" );
+        
+		try {
+			Files.write(pathLog, lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void generateTrace(File file, String way, String newName) {
+    	lines = Arrays.asList(
+    			"Fichier : " + file.getName(), 
+    			"Date : " + new Date().toString(), 
+    			"Acteur : " + System.getProperty("user.name"), 
+    			"Origine : " + file.getAbsolutePath(), 
+    			"Destination : " + way, 
+    			"Nouvelle version : " + newName,
     			"------------------------" );
         
 		try {
