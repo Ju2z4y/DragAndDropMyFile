@@ -92,14 +92,26 @@ public class Example {
 	        	for( int i = 0; i < files.length; i++ ) {   
 	        		try { // Récupération du fichier DnD
 	                    File file = new File(files[i].getCanonicalPath());
+	                    String fileNewName = file.getName();
+
 	                    // Vérification que le DnD est un fichier
 	                    if (file.isFile()) {
+	                    	//Vérifcation de l'existance du fichier dans le dossier d'arrivée.
+	                    	fileNewName = utils.checkIfVersion(fileNewName);
+	                    	File checkFile = new File(livrer + fileNewName);
+
+	                    	while (checkFile.exists()) {
+	                    		fileNewName = utils.versionIncr2(fileNewName);
+	                    		checkFile = new File(livrer + fileNewName);
+	                    	}
+
 	                        // Gestion du transfert du fichier
-	                        fileTransfert.delivery(file, livrer);
+	                        fileTransfert.delivery(file, livrer, fileNewName);
 	                        // Génération de la trace de gestion du fichier
-	                        fileTrace.generateTrace(file, livrer);
+	                        fileTrace.generateTrace(file, livrer, fileNewName);
+	                    	
 	                        // Information de l'utilisateur sur le mouvemnet du fichier
-	                        jtf.append( message.deliveryValidation(file, livrer) );
+	                        jtf.append( message.deliveryValidation(file, livrer, fileNewName) );
 	                    } else {
 	                    	jtf.append( message.notAFile(file));
 	                    }
