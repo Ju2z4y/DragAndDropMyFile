@@ -103,6 +103,36 @@ public class FileTransfert {
 		
 	}
 	
+	public void cancelDelivery(File fileOrigin, File fileDest) {
+		
+	    try {
+			bis = new BufferedInputStream(new FileInputStream(fileDest));
+		    bos = new BufferedOutputStream(new FileOutputStream(fileOrigin));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        try {
+    	    while((longueur = bis.read(buf)) > 0){
+    	    	bos.write(buf, 0, longueur);
+    	    }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     
+        try {
+			bis.close();
+            bos.close();
+            fileDest.delete();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 
 }

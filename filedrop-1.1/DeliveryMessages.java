@@ -7,26 +7,9 @@ public class DeliveryMessages {
 	}
 	
 	public String deliveryValidation(File file, String way) {
-		String message = "Transfert de : " + file.getName() +"\nDans le dossier :";
+		String message = "Transfert de : " + file.getName() +"\nDans le dossier :" + way;
 		
-		switch(way) {
-		  case "C:\\test\\livrer\\":
-			  message += " Livraison\n";
-		    break;
-		  case "C:\\test\\valider\\":
-			  message += " Valider\n";
-		    break;
-		  case "C:\\test\\invalider\\":
-			  message += " Invalider\n";
-		    break;
-		  case "C:\\test\\archiver\\":
-			  message += " Archiver\n";
-		    break;
-		  default:
-		    message += " Non identifier\n";
-		}
-		
-		return message += "-------------------\n";
+		return message += "\n-------------------\n";
 	}
 	
 	public String deliveryValidation(File file, String way, String newName) {
@@ -35,6 +18,10 @@ public class DeliveryMessages {
 		message += "\nSous le nouveau nom : " + newName + "\n-------------------\n";
 		
 		return message;
+	}
+	
+	public String cancelValidation() {
+		return "La dernière action à correctement été supprimée";
 	}
 
 	public String notAFile(File file) {

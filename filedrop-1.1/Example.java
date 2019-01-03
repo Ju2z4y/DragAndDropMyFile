@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,11 @@ import javax.swing.text.DefaultCaret;
 public class Example {
 	
 	private static Map<String, String> paramsMap = new HashMap<String, String>();
+
+	private static String livraison = "Livraison";
+	private static String validation = "Validation";
+	private static String invalidation = "Invalidation";
+	private static String archivage = "Archivage";
 
     /** Runs a sample program that shows dropped files */
     public static void main( String[] args )
@@ -149,21 +155,21 @@ public class Example {
 	                    if (file.isFile()) {
 
 	                    		fileNewName = utils.checkIfVersion(fileNewName);
-		                    	File checkFile = new File(paramsMap.get("livraison") + fileNewName);
+		                    	File checkFile = new File(paramsMap.get(livraison) + fileNewName);
 
 		                    	while (checkFile.exists()) {
 		                    		fileNewName = utils.versionIncr2(fileNewName);
-		                    		checkFile = new File(paramsMap.get("livraison") + fileNewName);
+		                    		checkFile = new File(paramsMap.get(livraison) + fileNewName);
 		                    		nameModified = true;
 		                    	}
 
 		                        // Gestion du transfert du fichier
-		                        fileTransfert.delivery(file, paramsMap.get("livraison"), fileNewName);
+		                        fileTransfert.delivery(file, paramsMap.get(livraison), fileNewName);
 		                        // Génération de la trace de gestion du fichier
-		                        fileTrace.generateTrace(file, paramsMap.get("livraison"), fileNewName);
+		                        fileTrace.generateTrace(file, paramsMap.get(livraison), livraison, fileNewName);
 		                    	
 		                        // Information de l'utilisateur sur le mouvemnet du fichier
-		                        jtf.append( message.deliveryValidation(file, paramsMap.get("livraison"), fileNewName));
+		                        jtf.append( message.deliveryValidation(file, paramsMap.get(livraison), fileNewName));
 
 	                    	// Vérifcation de l'existance du fichier dans le dossier d'arrivée.
 	                    	
@@ -191,11 +197,11 @@ public class Example {
 	                    // Vérification que le DnD est un fichier
 	                    if (file.isFile()) {
 		                    // Gestion du transfert du fichier
-		                    fileTransfert.deliveryAndRemove(file, paramsMap.get("validation"));
+		                    fileTransfert.deliveryAndRemove(file, paramsMap.get(validation));
 		                    // Génération de la trace de gestion du fichier
-		                    fileTrace.generateTrace(file, paramsMap.get("validation"));
+		                    fileTrace.generateTrace(file, paramsMap.get(validation), validation);
 		                    // Information de l'utilisateur sur le mouvemnet du fichier
-		                    jtf2.append( message.deliveryValidation(file, paramsMap.get("validation")) );
+		                    jtf2.append( message.deliveryValidation(file, paramsMap.get(validation)) );
 	                    } else {
 	                    	jtf2.append( message.notAFile(file));
 	                    }
@@ -215,11 +221,11 @@ public class Example {
 	                    // Vérification que le DnD est un fichier
 	                    if (file.isFile()) {
 		                    // Gestion du transfert du fichier
-		                    fileTransfert.deliveryAndRemove(file, paramsMap.get("invalidation"));
+		                    fileTransfert.deliveryAndRemove(file, paramsMap.get(invalidation));
 		                    // Génération de la trace de gestion du fichier
-		                    fileTrace.generateTrace(file, paramsMap.get("invalidation"));
+		                    fileTrace.generateTrace(file, paramsMap.get(invalidation), invalidation);
 		                    // Information de l'utilisateur sur le mouvemnet du fichier
-		                    jtf3.append( message.deliveryValidation(file, paramsMap.get("invalidation")) );
+		                    jtf3.append( message.deliveryValidation(file, paramsMap.get(invalidation)) );
 	                    } else {
 	                    	jtf3.append( message.notAFile(file));
 	                    }
@@ -240,11 +246,11 @@ public class Example {
 	                    if (file.isFile()) {
 	                    	String newFileName = utils.versionIncr(file.getName());
 	                        // Gestion du transfert du fichier
-	                        fileTransfert.deliveryAndRemove(file, paramsMap.get("archivage"), newFileName);
+	                        fileTransfert.deliveryAndRemove(file, paramsMap.get(archivage), newFileName);
 	                        // Génération de la trace de gestion du fichier
-	                        fileTrace.generateTrace(file, paramsMap.get("archivage"), newFileName);
+	                        fileTrace.generateTrace(file, paramsMap.get(archivage), archivage, newFileName);
 	                        // Information de l'utilisateur sur le mouvemnet du fichier
-	                        jtf4.append( message.deliveryValidation(file, paramsMap.get("archivage"), newFileName) );
+	                        jtf4.append( message.deliveryValidation(file, paramsMap.get(archivage), newFileName) );
 	                    } else {
 	                    	jtf4.append( message.notAFile(file));
 	                    }
@@ -264,8 +270,8 @@ public class Example {
             public void actionPerformed(ActionEvent evt) {
             	String livrer = JOptionPane.showInputDialog(frame,
                         "Où dois-je livrer ?", null);
-            	utils.checkPath(livrer);
-            	paramsMap.replace("livraison", livrer);
+            	livrer = utils.checkPath(livrer);
+            	paramsMap.replace(livraison, livrer);
             	utils.saveParam(paramsMap);
             	
             }
@@ -276,8 +282,8 @@ public class Example {
         	public void actionPerformed(ActionEvent evt) {
         		String valider = JOptionPane.showInputDialog(frame,
         				"Où dois-je valider ?", null);
-        		utils.checkPath(valider);
-            	paramsMap.replace("validation", valider);
+        		valider = utils.checkPath(valider);
+            	paramsMap.replace(validation, valider);
             	utils.saveParam(paramsMap);
         	}
         });
@@ -287,8 +293,8 @@ public class Example {
         	public void actionPerformed(ActionEvent evt) {
         		String invalider = JOptionPane.showInputDialog(frame,
         				"Où dois-je invalider ?", null);
-        		utils.checkPath(invalider);
-            	paramsMap.replace("invalidation", invalider);
+        		invalider = utils.checkPath(invalider);
+            	paramsMap.replace(invalidation, invalider);
             	utils.saveParam(paramsMap);
         	}
         });
@@ -298,9 +304,35 @@ public class Example {
         	public void actionPerformed(ActionEvent evt) {
         		String archiver = JOptionPane.showInputDialog(frame,
         				"Où dois-je archiver ?", null);
-        		utils.checkPath(archiver);
-            	paramsMap.replace("archivage", archiver);
+        		archiver = utils.checkPath(archiver);
+            	paramsMap.replace(archivage, archiver);
             	utils.saveParam(paramsMap);
+        	}
+        });
+        
+        cancel.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent evt) {
+        		String actionCancelled = fileTrace.cancelLastAction();
+        		
+        		switch (actionCancelled)
+        		{
+        		  case "Livraison":
+	    		    jtf.append(message.cancelValidation());
+	    		    break;           
+        		  case "Validation":
+	    			  jtf2.append(message.cancelValidation());
+	    			  break;           
+        		  case "Invalidation":
+        			  jtf3.append(message.cancelValidation());
+        			  break;           
+        		  case "Archivage":
+        			  jtf4.append(message.cancelValidation());
+        			  break;           
+        		  default:
+        		    /*Action*/;         
+        		}
+        		
         	}
         });
 
