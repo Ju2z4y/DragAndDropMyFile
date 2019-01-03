@@ -1,3 +1,18 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+
 
 public class DeliveryUtils {
 
@@ -83,6 +98,46 @@ public class DeliveryUtils {
 		String fileNameExt = fileName.substring(fileNameNoExt.length());
 		fileName = fileNameNoExt +"_v1.0" + fileNameExt;
 		return fileName;
+	}
+	
+	public void saveParam(Map<String, String> paramsMap) {
+
+		try {
+			Writer writer = new FileWriter("C:\\test\\params\\params.json");
+		    Gson gson = new GsonBuilder().create();
+		    gson.toJson(paramsMap, writer);
+		    writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public Map<String, String> loadParam() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<Map<String, String>>(){}.getType();
+		
+		try {
+			Reader reader = new FileReader("C:\\test\\params\\params.json");
+			Map<String, String> map = gson.fromJson(reader, type);
+			System.out.println(map.toString());
+			reader.close();
+			return map;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
+	}
+	
+	public String checkPath(String path) {
+		if (path.charAt(path.length()-1) == '\\') {
+			return path;
+		} else {
+			return path + "\\";
+		}
 	}
 }
 //

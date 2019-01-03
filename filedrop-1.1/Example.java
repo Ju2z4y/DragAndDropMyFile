@@ -5,11 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -17,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
 /**
@@ -26,11 +26,7 @@ import javax.swing.text.DefaultCaret;
  */
 public class Example {
 	
-	// Plan de classement
-	private static String livrer = "C:\\test\\livrer\\";
-	private static String valider = "C:\\test\\valider\\";
-	private static String invalider = "C:\\test\\invalider\\";
-	private static String archiver = "C:\\test\\archiver\\";
+	private static Map<String, String> paramsMap = new HashMap<String, String>();
 
     /** Runs a sample program that shows dropped files */
     public static void main( String[] args )
@@ -40,7 +36,7 @@ public class Example {
     	final DeliveryMessages message = new DeliveryMessages();
     	final DeliveryUtils utils = new DeliveryUtils();
     	
-
+    	paramsMap = utils.loadParam();
     	
     	// Initialisation de l'interface graphique Swing et de ses composants.
         JFrame frame = new JFrame( "DeliveryTrack" );
@@ -87,8 +83,8 @@ public class Example {
         
         // Création du Bouton RollBack
         JPanel panel = new JPanel(); // the panel is not visible in output
-        JButton send = new JButton("Annuler la dernière action");
-        panel.add(send);
+        JButton cancel = new JButton("Annuler la dernière action");
+        panel.add(cancel);
         
         panelMain.add(elmt1);
         panelMain.add(elmt2);
@@ -101,18 +97,18 @@ public class Example {
         
         jtf.append("Livrer un document \n-------------------\n"
         		+ "Déposer ici un fichier à livrer.(Copie)\n"
-        		+ "Celui ci doit être NON versionné ou versionné au format vX.X uniquement.\n\n"
+        		+ "Celui ci doit être NON versionné \nou versionné au format vX.X uniquement.\n\n"
         		+ "Incrémentation du versionning automatique.\n"
-        		+ "Exemple : 2 versements du fichier exemple.doc = exemple_v1.0.doc et exemple_v1.1.doc."
+        		+ "Exemple : 2 versements du fichier exemple.doc = exemple_v1.0.doc \net exemple_v1.1.doc."
         		+ "\n-------------------\n");
         jtf2.append("Valider un document \n-------------------\n"
-        		+ "Déposer ici un fichier à valider.(Déplacement)"
+        		+ "Déposer ici un fichier à valider.\n(Déplacement)"
         		+ "\n-------------------\n");
         jtf3.append("Invalider un document \n-------------------\n"
-        		+ "Déposer ici un fichier à invalider.(Déplacement)"
+        		+ "Déposer ici un fichier à invalider.\n(Déplacement)"
         		+ "\n-------------------\n");
         jtf4.append("Archiver un document \n-------------------\n"
-        		+ "Déposer ici un fichier à archiver.(Déplacement)"
+        		+ "Déposer ici un fichier à archiver.\n(Déplacement)"
         		+ "\n-------------------\n");
         
         jtf.setEditable(false);
@@ -125,10 +121,10 @@ public class Example {
         jtf3.setFont(jtf3.getFont().deriveFont(15f));
         jtf4.setFont(jtf4.getFont().deriveFont(15f));
         
-        Color gris = new Color(153,153,153);
-        Color vert = new Color(0,255,51);
-        Color rouge = new Color(255,51,51);
-        Color bleu = new Color(51,51,255);
+        Color gris = new Color(207,207,207);
+        Color vert = new Color(0,227,151);
+        Color rouge = new Color(225,151,151);
+        Color bleu = new Color(121,121,255);
         
         jtf.setBackground(gris);
         jtf2.setBackground(vert);
@@ -153,21 +149,21 @@ public class Example {
 	                    if (file.isFile()) {
 
 	                    		fileNewName = utils.checkIfVersion(fileNewName);
-		                    	File checkFile = new File(livrer + fileNewName);
+		                    	File checkFile = new File(paramsMap.get("livraison") + fileNewName);
 
 		                    	while (checkFile.exists()) {
 		                    		fileNewName = utils.versionIncr2(fileNewName);
-		                    		checkFile = new File(livrer + fileNewName);
+		                    		checkFile = new File(paramsMap.get("livraison") + fileNewName);
 		                    		nameModified = true;
 		                    	}
 
 		                        // Gestion du transfert du fichier
-		                        fileTransfert.delivery(file, livrer, fileNewName);
+		                        fileTransfert.delivery(file, paramsMap.get("livraison"), fileNewName);
 		                        // Génération de la trace de gestion du fichier
-		                        fileTrace.generateTrace(file, livrer, fileNewName);
+		                        fileTrace.generateTrace(file, paramsMap.get("livraison"), fileNewName);
 		                    	
 		                        // Information de l'utilisateur sur le mouvemnet du fichier
-		                        jtf.append( message.deliveryValidation(file, livrer, fileNewName));
+		                        jtf.append( message.deliveryValidation(file, paramsMap.get("livraison"), fileNewName));
 
 	                    	// Vérifcation de l'existance du fichier dans le dossier d'arrivée.
 	                    	
@@ -195,11 +191,11 @@ public class Example {
 	                    // Vérification que le DnD est un fichier
 	                    if (file.isFile()) {
 		                    // Gestion du transfert du fichier
-		                    fileTransfert.deliveryAndRemove(file, valider);
+		                    fileTransfert.deliveryAndRemove(file, paramsMap.get("validation"));
 		                    // Génération de la trace de gestion du fichier
-		                    fileTrace.generateTrace(file, valider);
+		                    fileTrace.generateTrace(file, paramsMap.get("validation"));
 		                    // Information de l'utilisateur sur le mouvemnet du fichier
-		                    jtf2.append( message.deliveryValidation(file, valider) );
+		                    jtf2.append( message.deliveryValidation(file, paramsMap.get("validation")) );
 	                    } else {
 	                    	jtf2.append( message.notAFile(file));
 	                    }
@@ -219,11 +215,11 @@ public class Example {
 	                    // Vérification que le DnD est un fichier
 	                    if (file.isFile()) {
 		                    // Gestion du transfert du fichier
-		                    fileTransfert.deliveryAndRemove(file, invalider);
+		                    fileTransfert.deliveryAndRemove(file, paramsMap.get("invalidation"));
 		                    // Génération de la trace de gestion du fichier
-		                    fileTrace.generateTrace(file, invalider);
+		                    fileTrace.generateTrace(file, paramsMap.get("invalidation"));
 		                    // Information de l'utilisateur sur le mouvemnet du fichier
-		                    jtf3.append( message.deliveryValidation(file, invalider) );
+		                    jtf3.append( message.deliveryValidation(file, paramsMap.get("invalidation")) );
 	                    } else {
 	                    	jtf3.append( message.notAFile(file));
 	                    }
@@ -244,11 +240,11 @@ public class Example {
 	                    if (file.isFile()) {
 	                    	String newFileName = utils.versionIncr(file.getName());
 	                        // Gestion du transfert du fichier
-	                        fileTransfert.deliveryAndRemove(file, archiver, newFileName);
+	                        fileTransfert.deliveryAndRemove(file, paramsMap.get("archivage"), newFileName);
 	                        // Génération de la trace de gestion du fichier
-	                        fileTrace.generateTrace(file, archiver, newFileName);
+	                        fileTrace.generateTrace(file, paramsMap.get("archivage"), newFileName);
 	                        // Information de l'utilisateur sur le mouvemnet du fichier
-	                        jtf4.append( message.deliveryValidation(file, archiver, newFileName) );
+	                        jtf4.append( message.deliveryValidation(file, paramsMap.get("archivage"), newFileName) );
 	                    } else {
 	                    	jtf4.append( message.notAFile(file));
 	                    }
@@ -266,32 +262,45 @@ public class Example {
         m11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-            	livrer = JOptionPane.showInputDialog(frame,
+            	String livrer = JOptionPane.showInputDialog(frame,
                         "Où dois-je livrer ?", null);
+            	utils.checkPath(livrer);
+            	paramsMap.replace("livraison", livrer);
+            	utils.saveParam(paramsMap);
+            	
             }
         });
         
         m22.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent evt) {
-        		livrer = JOptionPane.showInputDialog(frame,
+        		String valider = JOptionPane.showInputDialog(frame,
         				"Où dois-je valider ?", null);
+        		utils.checkPath(valider);
+            	paramsMap.replace("validation", valider);
+            	utils.saveParam(paramsMap);
         	}
         });
         
         m33.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent evt) {
-        		livrer = JOptionPane.showInputDialog(frame,
+        		String invalider = JOptionPane.showInputDialog(frame,
         				"Où dois-je invalider ?", null);
+        		utils.checkPath(invalider);
+            	paramsMap.replace("invalidation", invalider);
+            	utils.saveParam(paramsMap);
         	}
         });
         
         m44.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent evt) {
-        		livrer = JOptionPane.showInputDialog(frame,
+        		String archiver = JOptionPane.showInputDialog(frame,
         				"Où dois-je archiver ?", null);
+        		utils.checkPath(archiver);
+            	paramsMap.replace("archivage", archiver);
+            	utils.saveParam(paramsMap);
         	}
         });
 
