@@ -14,7 +14,7 @@ public class FileTransfert {
     private byte[] buf = new byte[10240];
     private int longueur = 0;
 	
-	public void delivery(File file, String way) {
+	public void deliveryAndRemove(File file, String way) {
 		
 	    try {
 			bis = new BufferedInputStream(new FileInputStream(file));
@@ -36,6 +36,7 @@ public class FileTransfert {
         try {
 			bis.close();
             bos.close();
+            file.delete();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,6 +66,36 @@ public class FileTransfert {
         try {
 			bis.close();
             bos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void deliveryAndRemove(File file, String way, String newFileName) {
+		
+	    try {
+			bis = new BufferedInputStream(new FileInputStream(file));
+		    bos = new BufferedOutputStream(new FileOutputStream(new File(way + newFileName)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        try {
+    	    while((longueur = bis.read(buf)) > 0){
+    	    	bos.write(buf, 0, longueur);
+    	    }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     
+        try {
+			bis.close();
+            bos.close();
+            file.delete();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
