@@ -175,6 +175,27 @@ public class DeliveryUtils {
 		}
 	}
 	
+	public String loadLogsParam() {
+		Gson gson = new Gson();
+		Type type = new TypeToken<Map<String, String>>(){}.getType();
+		
+		try {
+			Reader reader = new FileReader("C:\\DeliveryTrack\\params\\params.json");
+			Map<String, String> map = gson.fromJson(reader, type);
+			System.out.println(map.toString());
+			reader.close();
+			
+			return map.get("Logs");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			return null;
+		} catch (IOException e) {
+			return null;
+		} catch (NullPointerException e) {
+			return null;
+		}
+	}
+	
 	public String checkPath(String path) {
 		if (path.charAt(path.length()-1) == '\\') {
 			return path;

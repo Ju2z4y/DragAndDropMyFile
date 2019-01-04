@@ -13,6 +13,8 @@ import java.util.List;
 
 public class FileTrace {
 	
+	private DeliveryUtils utils = new DeliveryUtils();
+	
     private List<String> lines;
     private String pathString = "C:\\DeliveryTrack\\logs\\";
 	private Path pathLog = Paths.get(pathString + "logs.txt");
@@ -21,6 +23,7 @@ public class FileTrace {
  	private static ArrayList<Action> actions = new ArrayList<Action>();
 	
 	public void generateTrace(File file, String way, String action) {
+		setPathLog(utils.loadLogsParam());
 		Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyy hh:mm:ss");
         String formattedDate = formatter.format(date);
@@ -45,6 +48,7 @@ public class FileTrace {
 	}
 	
 	public void generateTrace(File file, String way, String action, String newName) {
+		setPathLog(utils.loadLogsParam());
 		Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyy hh:mm:ss");
         String formattedDate = formatter.format(date);
@@ -96,4 +100,9 @@ public class FileTrace {
     public void setPathString(String pathString) {
 		this.pathString = pathString;
 	}
+    
+	public void setPathLog(String pathString) {
+		this.pathLog = Paths.get(pathString + "logs.txt");
+	}
+
 }

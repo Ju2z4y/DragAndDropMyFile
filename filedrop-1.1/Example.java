@@ -86,16 +86,18 @@ public class Example {
         
         // Creating the MenuBar and adding components
         JMenuBar mb = new JMenuBar();
-        JMenu m1 = new JMenu("Options");
+        JMenu m1 = new JMenu("Gestion du plan de classement");
         mb.add(m1);
         JMenuItem m11 = new JMenuItem("Changer l'adresse de livraison");
         JMenuItem m22 = new JMenuItem("Changer l'adresse de validation");
         JMenuItem m33 = new JMenuItem("Changer l'adresse de invalidation");
         JMenuItem m44 = new JMenuItem("Changer l'adresse d'archivage");
+        JMenuItem m55 = new JMenuItem("Changer l'adresse des logs");
         m1.add(m11);
         m1.add(m22);
         m1.add(m33);
         m1.add(m44);
+        m1.add(m55);
         
         // Création du Bouton RollBack
         JPanel panel = new JPanel(); // the panel is not visible in output
@@ -317,6 +319,17 @@ public class Example {
         		archiver = utils.checkPath(archiver);
             	paramsMap.replace(archivage, archiver);
             	utils.saveParam(paramsMap);
+        	}
+        });
+        
+        m55.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent evt) {
+        		String logs = JOptionPane.showInputDialog(frame,
+        				"Où dois-je stocker les logs ?", null);
+        		logs = utils.checkPath(logs);
+        		paramsMap.replace("Logs", logs);
+        		utils.saveParam(paramsMap);
         	}
         });
         
