@@ -13,9 +13,10 @@ import java.util.List;
 
 public class FileTrace {
 	
-     private List<String> lines;
-     private Path pathLog = Paths.get("C:\\test\\logs\\logs.txt");
-     private FileTransfert fileTransfert = new FileTransfert();
+    private List<String> lines;
+    private String pathString = "C:\\DeliveryTrack\\logs\\";
+	private Path pathLog = Paths.get(pathString + "logs.txt");
+	private FileTransfert fileTransfert = new FileTransfert();
      
  	private static ArrayList<Action> actions = new ArrayList<Action>();
 	
@@ -91,5 +92,8 @@ public class FileTrace {
 		}
 
 	}
-
+	
+    public void setPathString(String pathString) {
+		this.pathString = pathString;
+	}
 }

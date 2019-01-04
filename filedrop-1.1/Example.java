@@ -52,6 +52,8 @@ public class Example {
     		planDeClassementVide = false;
     	}
     	
+    	fileTrace.setPathString(paramsMap.get("Logs"));
+    	
     	// Initialisation de l'interface graphique Swing et de ses composants.
         JFrame frame = new JFrame( "DeliveryTrack" );
         

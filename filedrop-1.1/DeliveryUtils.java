@@ -155,11 +155,14 @@ public class DeliveryUtils {
 		invalider.mkdir();
 		File archiver = new File("C:\\DeliveryTrack\\archiver");
 		archiver.mkdir();
+		File logs = new File("C:\\DeliveryTrack\\logs");
+		logs.mkdir();
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("Livraison", "C:\\DeliveryTrack\\livrer");
-		params.put("Validation", "C:\\DeliveryTrack\\valider");
-		params.put("Invalidation", "C:\\DeliveryTrack\\invalider");
-		params.put("Archivage", "C:\\DeliveryTrack\\archiver");
+		params.put("Livraison", "C:\\DeliveryTrack\\livrer\\");
+		params.put("Validation", "C:\\DeliveryTrack\\valider\\");
+		params.put("Invalidation", "C:\\DeliveryTrack\\invalider\\");
+		params.put("Archivage", "C:\\DeliveryTrack\\archiver\\");
+		params.put("Logs", "C:\\DeliveryTrack\\logs\\");
 		params.put("Error", "true");
 		
 		try {
