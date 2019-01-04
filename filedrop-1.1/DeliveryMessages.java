@@ -21,7 +21,7 @@ public class DeliveryMessages {
 	}
 	
 	public String cancelValidation() {
-		return "La dernière action à correctement été supprimée";
+		return "La dernière action à correctement été supprimée\n-----------------\n";
 	}
 
 	public String notAFile(File file) {

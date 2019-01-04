@@ -42,7 +42,15 @@ public class Example {
     	final DeliveryMessages message = new DeliveryMessages();
     	final DeliveryUtils utils = new DeliveryUtils();
     	
-    	paramsMap = utils.loadParam();
+    	paramsMap = utils.loadParam(false);
+    	
+    	boolean planDeClassementVide;
+    	
+    	if(paramsMap.get("Error") == "true") {
+    		planDeClassementVide = true;
+    	} else {
+    		planDeClassementVide = false;
+    	}
     	
     	// Initialisation de l'interface graphique Swing et de ses composants.
         JFrame frame = new JFrame( "DeliveryTrack" );
@@ -330,16 +338,21 @@ public class Example {
         			  jtf4.append(message.cancelValidation());
         			  break;           
         		  default:
-        		    /*Action*/;         
+        			  JOptionPane.showMessageDialog(frame, "Acune action enregistrée");       
         		}
         		
         	}
         });
 
+        
+
         frame.setSize(1200,400);
 //        frame.setBounds( 100, 100, 100, 100 );
         frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
         frame.setVisible(true);
+        if (planDeClassementVide) {
+        	JOptionPane.showMessageDialog(frame, "ATTENTION : Plan de classement par défault chargé."); 
+        }
     }   // end main
 }
 	// Utilitaires débug

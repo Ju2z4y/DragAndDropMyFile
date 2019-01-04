@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -24,7 +23,7 @@ public class FileTrace {
 		Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyy hh:mm:ss");
         String formattedDate = formatter.format(date);
-        String pathDest = way + "\\" + file.getName();
+        String pathDest = way + file.getName();
     	lines = Arrays.asList(
     			"Action : " + action,
     			"Date : " + formattedDate, 
@@ -48,7 +47,7 @@ public class FileTrace {
 		Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyy hh:mm:ss");
         String formattedDate = formatter.format(date);
-        String pathDest = way + "\\" + newName;
+        String pathDest = way + newName;
     	lines = Arrays.asList(
     			"Action : " + action,
     			"Date : " + formattedDate, 
@@ -59,7 +58,9 @@ public class FileTrace {
     			"Nouvelle version : " + newName, 
     			"------------------------" );
     	
-    	actions.add(new Action(action, file.getAbsolutePath(), pathDest));
+    	if (action != "Annulation") {
+    		actions.add(new Action(action, file.getAbsolutePath(), pathDest));	
+    	}
         
 		try {
 			Files.write(pathLog, lines, Charset.forName("UTF-8"),
@@ -71,16 +72,24 @@ public class FileTrace {
 	}
 	
 	public String cancelLastAction() {
-		Action actionToCancel = actions.get(actions.size()-1);
-		File fileOrigin = new File(actionToCancel.getPathOrigin());
-		File fileDest = new File(actionToCancel.getPathDest());
-		if (actionToCancel.getAction() == "Livraison") {
-			fileDest.delete();
+		if (actions.size() > 0) {
+			Action actionToCancel = actions.get(actions.size()-1);
+			File fileOrigin = new File(actionToCancel.getPathOrigin());
+			File fileDest = new File(actionToCancel.getPathDest());
+			if (actionToCancel.getAction() == "Livraison") {
+				fileDest.delete();
+			} else {
+				fileTransfert.cancelDelivery(fileOrigin, fileDest);
+			}
+			generateTrace(fileOrigin, actionToCancel.getPathDest(), "Annulation", fileDest.getName());
+			actions.remove(actions.size()-1);
+			System.out.println("Actions Size : " + actions.size());
+			System.out.println("Action : " + actionToCancel.toString());
+			return actionToCancel.getAction();
 		} else {
-			fileTransfert.cancelDelivery(fileOrigin, fileDest);
+			return "NoActions";
 		}
-		actions.remove(actions.size()-1);
-		return actionToCancel.getAction();
+
 	}
 
 }

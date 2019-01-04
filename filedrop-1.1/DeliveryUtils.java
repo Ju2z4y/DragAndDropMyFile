@@ -103,7 +103,7 @@ public class DeliveryUtils {
 	public void saveParam(Map<String, String> paramsMap) {
 
 		try {
-			Writer writer = new FileWriter("C:\\test\\params\\params.json");
+			Writer writer = new FileWriter("C:\\DeliveryTrack\\params\\params.json");
 		    Gson gson = new GsonBuilder().create();
 		    gson.toJson(paramsMap, writer);
 		    writer.close();
@@ -113,22 +113,62 @@ public class DeliveryUtils {
 		}
 	}
 	
-	public Map<String, String> loadParam() {
+	public Map<String, String> loadParam(boolean error) {
 		Gson gson = new Gson();
 		Type type = new TypeToken<Map<String, String>>(){}.getType();
 		
 		try {
-			Reader reader = new FileReader("C:\\test\\params\\params.json");
+			Reader reader = new FileReader("C:\\DeliveryTrack\\params\\params.json");
 			Map<String, String> map = gson.fromJson(reader, type);
 			System.out.println(map.toString());
 			reader.close();
+			if (error) {
+				map.replace("Error", "true");
+			} else {
+				map.replace("Error", "false");
+			}
+			
 			return map;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			
+			createParams();
+			return loadParam(true);
 		} catch (IOException e) {
 			return null;
+		} catch (NullPointerException e) {
+			createParams();
+			return loadParam(true);
+		}
+	}
+	
+	public void createParams() {
+		File folder1 = new File("C:\\DeliveryTrack");
+		folder1.mkdir();
+		File folder = new File("C:\\DeliveryTrack\\params");
+		folder.mkdir();
+		File livrer = new File("C:\\DeliveryTrack\\livrer");
+		livrer.mkdir();
+		File valider = new File("C:\\DeliveryTrack\\valider");
+		valider.mkdir();
+		File invalider = new File("C:\\DeliveryTrack\\invalider");
+		invalider.mkdir();
+		File archiver = new File("C:\\DeliveryTrack\\archiver");
+		archiver.mkdir();
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("Livraison", "C:\\DeliveryTrack\\livrer");
+		params.put("Validation", "C:\\DeliveryTrack\\valider");
+		params.put("Invalidation", "C:\\DeliveryTrack\\invalider");
+		params.put("Archivage", "C:\\DeliveryTrack\\archiver");
+		params.put("Error", "true");
+		
+		try {
+			Writer writer = new FileWriter("C:\\DeliveryTrack\\params\\params.json");
+		    Gson gson = new GsonBuilder().create();
+		    gson.toJson(params, writer);
+		    writer.close();
+		} catch (IOException e) {
+			
 		}
 	}
 	
